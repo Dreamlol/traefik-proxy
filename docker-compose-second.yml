@@ -1,0 +1,27 @@
+version: "3.5"
+
+services:
+  nginx-second:
+    image: nginx
+    labels:
+    - "traefik.backend=nginx-second"
+    - "traefik.frontend.rule=Host:bar.florasale.fun"
+    - "traefik.port=80"
+    - "traefik.docker.network=traefik-net"
+    - "traefik.frontend.entryPoints=https"
+    volumes:
+    - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+    - default
+    - traefik-net
+
+  ghost:
+    image: ghost
+    networks:
+    - default
+    - traefik-net
+
+networks:
+  traefik-net:
+    external:
+      name: traefik-net
